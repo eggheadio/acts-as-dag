@@ -241,7 +241,7 @@ module Dag
           was = 0 if was.nil?
           above_leg_count = above_leg.count - was
           if below_leg.count_changed?
-            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot 0 normal count change'
+            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot have count changes'
           else
             below_leg_count = below_leg.count
           end
@@ -252,7 +252,7 @@ module Dag
             was = 0 if was.nil?
             below_leg_count = below_leg.count - was
           else
-            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot have count changes'
+            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot 0 normal count change'
           end
         end
         count = above_leg_count * below_leg_count
