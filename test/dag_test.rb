@@ -368,9 +368,9 @@ class DagTest < Minitest::Test
     a = Node.create!
     b = Node.create!
     e = Default.create_edge(a, b)
-    e2 = Default.create_edge(a, b)
+    e2 = Default.build_edge(a, b).save
     assert !e2
-    assert_raises(ActiveRecord::RecordInvalid) { e3 = Default.create_edge!(a, b) }
+    assert_raises(ActiveRecord::RecordInvalid) { e3 = Default.build_edge(a, b).save! }
   end
 
   #Tests that we catch reversed links on creation (cycles)
@@ -398,15 +398,6 @@ class DagTest < Minitest::Test
     b = Node.create!
     e = Default.create_edge!(a, b)
     e.make_indirect
-    assert !e.save
-    assert_raises(ActiveRecord::RecordInvalid) { e.save! }
-  end
-
-  #Tests that nochanges fails save and save!
-  def test_validation_on_update_no_change_catch
-    a = Node.create!
-    b = Node.create!
-    e = Default.create_edge!(a, b)
     assert !e.save
     assert_raises(ActiveRecord::RecordInvalid) { e.save! }
   end
@@ -608,11 +599,26 @@ class DagTest < Minitest::Test
     assert !e.nil?
   end
 
-  def test_has_many_parents_build_assign
+  # Tests parent added to a new node
+  def test_has_many_parents_build_assign_save
     a = Node.create!
     b = Node.new
     b.parents << a
     assert b.valid?, b.errors.full_messages
+    assert b.save
+  end
+
+  # Tests creation of a bridging link between a new node and a grandparent
+  def test_create_parent_with_grandparent
+    a = Node.create!
+    b = Node.create!
+    b.parents << a
+    c = Node.new
+    c.parents << b
+    assert c.save
+    e = Default.find_link(a, c)
+    assert e
+    assert !e.direct?
   end
 
   #Tests leaf? instance method
