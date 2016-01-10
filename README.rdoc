@@ -137,16 +137,12 @@ Several class methods get added to the link model to make it easier to find and 
     
     #Finds a link or returns nil
     self.find_link(ancestor,descendant)
-    #Returns true if a link exists
-    self.connected?(ancestor,descendant)
     
     #Creates an edge between an ancestor and descendant
     self.create_edge(ancestor,descendant)
-    self.connect(ancestor,descendant)
     
     #Creates an edge using save! between an ancestor and descendant
     self.create_edge!(ancestor,descendant)
-    self.connect!(ancestor,descendant)
     
     #Builds an edge between an ancestor and descendant, returning an unsaved edge
     self.build_edge(ancestor,descendant)
