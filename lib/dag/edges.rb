@@ -43,6 +43,8 @@ module Dag
       if link.nil?
         edge = self.build_edge(ancestor, descendant)
         return edge.save
+      elsif link.direct?
+        return false
       else
         link.make_direct
         return link.save
@@ -56,6 +58,8 @@ module Dag
         edge = self.build_edge(ancestor, descendant)
         edge.save!
         edge
+      elsif link.direct?
+        raise ActiveRecord::RecordInvalid
       else
         link.make_direct
         link.save!

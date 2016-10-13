@@ -402,15 +402,6 @@ class DagTest < Minitest::Test
     assert_raises(ActiveRecord::RecordInvalid) { e.save! }
   end
 
-  #Tests that nochanges fails save and save!
-  def test_validation_on_update_no_change_catch
-    a = Node.create!
-    b = Node.create!
-    e = Default.create_edge!(a, b)
-    assert !e.save
-    assert_raises(ActiveRecord::RecordInvalid) { e.save! }
-  end
-
   #Tests that destroyable? works as required
   def tests_destroyable
     a = Node.create!
@@ -606,6 +597,11 @@ class DagTest < Minitest::Test
     b.parents << a
     e = Default.find_link(a, b)
     assert !e.nil?
+  end
+
+  def test_create_with_parents
+    a = Node.create!
+    Node.create!(parent_ids: [a.id])
   end
 
   def test_has_many_parents_build_assign
