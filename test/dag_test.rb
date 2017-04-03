@@ -599,8 +599,12 @@ class DagTest < Minitest::Test
     assert !e.nil?
   end
 
-  # Tests parent added to a new node
-  def test_has_many_parents_build_assign_save
+  def test_create_with_parents
+    a = Node.create!
+    Node.create!(parent_ids: [a.id])
+  end
+
+  def test_has_many_parents_build_assign
     a = Node.create!
     b = Node.new
     b.parents << a
