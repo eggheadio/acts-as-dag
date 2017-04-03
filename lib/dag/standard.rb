@@ -12,6 +12,10 @@ module Dag
         self.id == other.id
       end
 
+      def nil?
+        self.id.nil?
+      end
+
       #Factory Construction method that creates an endpoint from a model
       def self.from_resource(resource)
         self.new(resource.id)

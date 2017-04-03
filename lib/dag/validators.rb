@@ -39,7 +39,6 @@ module Dag
   class UpdateCorrectnessValidator < ActiveModel::Validator
 
     def validate(record)
-      record.errors[:base] << "No changes" unless record.changed?
       record.errors[:base] << "Do not manually change the count value" if manual_change(record)
       record.errors[:base] << "Cannot make a direct link with count 1 indirect" if direct_indirect(record)
     end
